@@ -1,40 +1,53 @@
-import React, { useLayoutEffect, useState } from "react";
-import {
-  Button,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import React, { useLayoutEffect, useState, useEffect, useContext } from "react";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { MEALS } from "../data/dummy-data";
 import IconButton from "../components/icon-button";
+// import { useDispatch, useSelector } from "react-redux";
+// import { addFavorite, removeFavorite } from "../store/redux/favorites-slice";
+import { FavouriteContext } from "../store/context/favorites-context";
 
 const MealDetails = ({ route, navigation }) => {
   const mealId = route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
-  const [color, setColor] = useState("#ededed");
 
-  const pressButton = () => {
-    setColor((prevColor) => (prevColor === "#ededed" ? "gold" : "#ededed"));
+  // const dispatch = useDispatch();
+
+  // @ts-ignore
+  // const favoriteMealIds = useSelector((state) => state.faveMealsReducer)
+  const favMealCtx = useContext(FavouriteContext);
+
+
+  // @ts-ignore
+  // const isMealFave = favoriteMealIds.ids.includes(mealId);
+  const isMealFave = favMealCtx.ids.includes(mealId);
+
+  const [color, setColor] = useState(isMealFave ? "gold" : "#ededed");
+
+  useEffect(() => {
+    setColor(isMealFave ? "gold" : "#ededed");
+  }, [isMealFave]);
+
+  const changeFavouriteStatus = () => {
+    if (isMealFave) {
+      favMealCtx.removeFavorite(mealId);
+      // dispatch(removeFavorite({id: mealId}));
+    } else {
+      favMealCtx.addFavorite(mealId);
+      // dispatch(addFavorite({id: mealId}));
+    }
   };
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: selectedMeal?.title,
-      headerRight: () => {
-        return <IconButton icon="star" onPress={pressButton} color={color} />;
-      },
+      headerRight: () => (
+        <IconButton icon="star" onPress={changeFavouriteStatus} color={color} />
+      ),
     });
-  }, [navigation, pressButton]);
+  }, [navigation, changeFavouriteStatus, color]);
 
   return (
-    <ScrollView
-      style={styles.screen}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ flexGrow: 1 }}
-    >
+    <ScrollView style={styles.screen}>
       <Image style={styles.image} source={{ uri: selectedMeal?.imageUrl }} />
       <View style={styles.innerContainer}>
         <Text style={styles.title}>About the Meal</Text>

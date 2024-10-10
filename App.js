@@ -13,6 +13,10 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
 
+import FavouritesContextProvider from "./store/context/favorites-context";
+// import { Provider } from "react-redux";
+// import { store } from './store/redux/store'
+
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -57,31 +61,35 @@ export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            contentStyle: { backgroundColor: "#f5f5f5" },
-            headerStyle: { backgroundColor: "white" },
-            headerTintColor: "black",
-          }}
-        >
-          <Stack.Screen
-            name="Drawer"
-            component={DrawerNavigator}
-            options={{
-              headerShown: false,
+      <FavouritesContextProvider>
+      {/* <Provider store={store}> */}
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              contentStyle: { backgroundColor: "#f5f5f5" },
+              headerStyle: { backgroundColor: "white" },
+              headerTintColor: "black",
             }}
-          />
-          <Stack.Screen name="MealsOverview" component={MealsOverview} />
-          <Stack.Screen
-            name="MealsDetails"
-            component={MealDetails}
-            options={{
-              contentStyle: { backgroundColor: "white" },
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+          >
+            <Stack.Screen
+              name="Drawer"
+              component={DrawerNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen name="MealsOverview" component={MealsOverview} />
+            <Stack.Screen
+              name="MealsDetails"
+              component={MealDetails}
+              options={{
+                contentStyle: { backgroundColor: "white" },
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      {/* </Provider> */}
+      </FavouritesContextProvider>
     </View>
   );
 }

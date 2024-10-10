@@ -1,17 +1,16 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { CATEGORIES } from "../data/dummy-data";
 import CategoryCard from "../components/category-cards";
 
-
-const CategoriesScreen = ({navigation}) => {
+const CategoriesScreen = ({ navigation }) => {
   const renderCategoryItem = (itemData) => {
     const pressHandler = () => {
       navigation.navigate("MealsOverview", {
-        categoryId: itemData.item.id
+        categoryId: itemData.item.id,
       });
     };
-  
+
     return (
       <CategoryCard
         onPress={pressHandler}
@@ -27,9 +26,19 @@ const CategoriesScreen = ({navigation}) => {
       keyExtractor={(item) => item.id}
       renderItem={renderCategoryItem}
       numColumns={2}
-      key={2}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.flatListContainer}
     />
   );
 };
 
 export default CategoriesScreen;
+
+const styles = StyleSheet.create({
+  flatListContainer: {
+    paddingHorizontal: 10,
+    paddingBottom: 20,
+    paddingTop: 10
+  },
+});

@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import Color from "color";
 
 const CategoryCard = ({ title, color, onPress }) => {
-  const rippleColor = Color(color).darken(0.2).hex();
+  const rippleColor = Color(color).darken(0.3).hex();
 
   return (
     <View style={[styles.container, { backgroundColor: color }]}>
@@ -53,6 +53,5 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     fontSize: 18,
-    // color: "white",
   },
 });

@@ -12,7 +12,7 @@ const MealsOverview = ({ route, navigation }) => {
 
   const pressHandler = (mealId) => {
     navigation.navigate("MealsDetails", {
-      mealId: mealId
+      mealId: mealId,
     });
   };
 
@@ -35,7 +35,7 @@ const MealsOverview = ({ route, navigation }) => {
       duration: item.duration,
       complexity: item.complexity,
       affordability: item.affordability,
-      onPress: () => pressHandler(item.id)
+      onPress: () => pressHandler(item.id),
     };
 
     return <MealItem {...mealItemProps} />;
@@ -47,6 +47,9 @@ const MealsOverview = ({ route, navigation }) => {
         data={displayedMeals}
         keyExtractor={(item) => item.id}
         renderItem={renderMealItems}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.flatListContainer}
       />
     </View>
   );
@@ -58,5 +61,8 @@ const styles = StyleSheet.create({
   mealContainer: {
     flex: 1,
     padding: 20,
+  },
+  flatListContainer: {
+    paddingBottom: 20,
   },
 });

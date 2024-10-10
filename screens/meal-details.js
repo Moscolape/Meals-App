@@ -1,23 +1,43 @@
-import React, { useLayoutEffect } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  Button,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { MEALS } from "../data/dummy-data";
-import SelectedMeal from "../components/selected-meal-item";
+import IconButton from "../components/icon-button";
 
 const MealDetails = ({ route, navigation }) => {
   const mealId = route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+  const [color, setColor] = useState("#ededed");
+
+  const pressButton = () => {
+    setColor((prevColor) => (prevColor === "#ededed" ? "gold" : "#ededed"));
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: selectedMeal?.title,
+      headerRight: () => {
+        return <IconButton icon="star" onPress={pressButton} color={color} />;
+      },
     });
-  }, [mealId, navigation]);
+  }, [navigation, pressButton]);
 
   return (
-    <ScrollView style={styles.screen}>
+    <ScrollView
+      style={styles.screen}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
       <Image style={styles.image} source={{ uri: selectedMeal?.imageUrl }} />
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>{selectedMeal?.title}</Text>
+        <Text style={styles.title}>About the Meal</Text>
         <View style={styles.detailsContainer}>
           <Text style={styles.detailText}>
             Duration: {selectedMeal?.duration} minutes
@@ -68,11 +88,12 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 250,
+    height: 300,
     marginBottom: 20,
   },
   innerContainer: {
     paddingHorizontal: 20,
+    flex: 1,
   },
   title: {
     fontSize: 24,
